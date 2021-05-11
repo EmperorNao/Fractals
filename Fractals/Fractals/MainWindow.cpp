@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "Settings.h"
 #include "FractalCreator.h"
+#include <iostream>
 
 complex z_sq(complex z, complex c) {
 
@@ -9,8 +10,51 @@ complex z_sq(complex z, complex c) {
 }
 
 
+class Button : public sf::Drawable, sf::Transformable {
+private:
+	sf::RectangleShape shape;
+	sf::Text text;
+
+public:
+	Button() {};
+	Button(std::string t, sf::Vector2f pos, sf::Vector2f size) {//, int charSize, sf::Color bgColor, sf::Color textColor) {
+		text.setString(t);
+		text.setFillColor({255, 255, 0, 255});
+		text.setCharacterSize(10);
+		text.setPosition({30, 30});
+		shape.setPosition(pos);
+		shape.setSize(size);
+		shape.setFillColor({ 120, 120, 120, 255 });
+	}
+
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const {
+		states.transform *= getTransform();
+		target.draw(shape);
+		target.draw(text);
+	}
+
+	bool isMouseOver(sf::RenderWindow& window) {
+		float mouseX = sf::Mouse::getPosition(window).x;
+		float mouseY = sf::Mouse::getPosition(window).y;
+
+		float buttonX = shape.getPosition().x;
+		float buttonY = shape.getPosition().y;
+
+		float buttonWidth = shape.getPosition().x + shape.getLocalBounds().width;
+		float buttonHeight = shape.getPosition().y + shape.getLocalBounds().height;
+
+		if (mouseX < buttonWidth && mouseX > buttonX && mouseY < buttonHeight && mouseY > buttonY)
+			return true;
+
+		else
+			return false;
+	}
+};
+
+
 void MainWindow::run() {
 
+	Button b("Name", sf::Vector2f{ 0, 0 }, sf::Vector2f{ 300, 300 });
 	// —оздаем окно размером 600 на 600 и частотой обновлени€ 60 кадров в секунду
 	Settings settings;
 	sf::RenderWindow window(sf::VideoMode(settings.window_width, settings.window_height), \
@@ -83,6 +127,11 @@ void MainWindow::run() {
 					settings.right = right + top * 1i;
 
 				}
+				if (b.isMouseOver(window)) {
+
+					std::cout << "test" << std::endl;
+
+				}
 			}
 
 			// zoom
@@ -106,6 +155,7 @@ void MainWindow::run() {
 
 		// отрисовка
 		window.draw(sprite);
+		window.draw(b);
 
 		// отображение на экран
 		window.display();

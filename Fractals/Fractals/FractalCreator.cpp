@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 sf::Image FractalCreator::create_image() {
 
 	ColorDefinitor def(settings->max_iterations);
@@ -55,4 +56,5 @@ sf::Image FractalCreator::create_image() {
 	im.create(settings->num_width_points, settings->num_height_points, pxl);
 
 	return im;
+
 };
