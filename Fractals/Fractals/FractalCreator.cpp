@@ -1,5 +1,8 @@
 #include "FractalCreator.h"
 #include "ColorDefinitor.h"
+#include <omp.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 sf::Image FractalCreator::create_image() {
 
@@ -18,7 +21,7 @@ sf::Image FractalCreator::create_image() {
 
 	complex c;
 	complex z = 0;
-
+	#pragma omp parallel for num_threads(4)
 	for (int i = 0; i < settings->num_width_points; ++i) {
 
 		for (int j = 0; j < settings->num_height_points; ++j) {
