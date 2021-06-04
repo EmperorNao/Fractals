@@ -3,6 +3,8 @@
 #include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <chrono>
+#include <iostream>
 
 
 sf::Image FractalCreator::create_image() {
@@ -22,7 +24,8 @@ sf::Image FractalCreator::create_image() {
 
 	complex c;
 	complex z = 0;
-	#pragma omp parallel for num_threads(4)
+	//#pragma omp parallel for num_threads(4) shared(pxl) private(i, j, c, z, color, num_iter, )
+	auto  start = std::chrono::system_clock::now();
 	for (int i = 0; i < settings->num_width_points; ++i) {
 
 		for (int j = 0; j < settings->num_height_points; ++j) {
@@ -33,13 +36,13 @@ sf::Image FractalCreator::create_image() {
 			 sf::Color color = sf::Color(0, 0, 0, 255);
 			 for (int num_iter = 0; num_iter < settings->max_iterations; ++num_iter) {
 
-				 z = settings->function_builder(z, c);
-				 if (abs(z) > settings->infinity_border) {
+			 z = settings->function_builder(z, c);
+			 if (abs(z) > settings->infinity_border) {
 
-					 color = def.get_color(num_iter);
-					 break;
+				 color = def.get_color(num_iter);
+				 break;
 
-				 }
+			 }
 
 			 }
 			 pxl[i * columns_size + j * 4 + 0] = color.r;
@@ -51,7 +54,10 @@ sf::Image FractalCreator::create_image() {
 
 
 	}
-
+	auto end = std::chrono::system_clock::now();
+	auto diff = end - start;
+	auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(diff).count();
+	std::cout << millis << " ms" << std::endl;
 	sf::Image im;
 	im.create(settings->num_width_points, settings->num_height_points, pxl);
 

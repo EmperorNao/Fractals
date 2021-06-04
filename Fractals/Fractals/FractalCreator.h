@@ -5,7 +5,6 @@
 #include "Settings.h"
 
 using namespace std::complex_literals;
-typedef std::complex<double> complex;
 
 class FractalCreator {
 

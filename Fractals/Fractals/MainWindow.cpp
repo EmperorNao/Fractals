@@ -5,7 +5,7 @@
 
 complex z_sq(complex z, complex c) {
 
-	return z * z + c;
+	return z*z*z*z*z*z + c;
 
 }
 
@@ -54,7 +54,7 @@ public:
 
 void MainWindow::run() {
 
-	Button b("Name", sf::Vector2f{ 0, 0 }, sf::Vector2f{ 300, 300 });
+	Button b("Name", sf::Vector2f{ 0, 0 }, sf::Vector2f{ 0, 0 });
 	// Создаем окно размером 600 на 600 и частотой обновления 60 кадров в секунду
 	Settings settings;
 	sf::RenderWindow window(sf::VideoMode(settings.window_width, settings.window_height), \
