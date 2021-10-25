@@ -1,10 +1,5 @@
 #include "FractalCreator.h"
-#include "ColorDefinitor.h"
-#include <omp.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <chrono>
-#include <iostream>
+
 
 
 sf::Image FractalCreator::create_image() {
@@ -22,15 +17,15 @@ sf::Image FractalCreator::create_image() {
 	double step_real = (right - left) / settings->num_width_points;
 	double step_imag = (top - bottom) / settings->num_height_points;
 
-	complex c;
-	complex z = 0;
+	Complex c;
+	Complex z;
 	//#pragma omp parallel for num_threads(4) shared(pxl) private(i, j, c, z, color, num_iter, )
 	auto  start = std::chrono::system_clock::now();
 	for (int i = 0; i < settings->num_width_points; ++i) {
 
 		for (int j = 0; j < settings->num_height_points; ++j) {
 
-			 c = left + i * step_real + bottom * 1i + j * step_imag * 1i;
+			 c = Complex(left + i * step_real, bottom + j * step_imag);
 			
 			 z = 0;
 			 sf::Color color = sf::Color(0, 0, 0, 255);
